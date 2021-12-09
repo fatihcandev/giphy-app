@@ -52,44 +52,41 @@ const Home: NextPage = () => {
   Just a reminder.
    */
 
-  const handleSearch: SearchFunc = useCallback(
-    async ({ query, offset = 0 }) => {
-      const queryParams: RequestQueryParams = {
-        api_key: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
-        q: query,
-        limit: 24,
-        offset,
-      }
-      const queryString: string = Object.keys(queryParams)
-        .map((key) => `${key}=${queryParams[key]}`)
-        .join("&")
-      const url = `https://api.giphy.com/v1/gifs/search?${queryString}`
-      try {
-        const response = await fetch(url)
-        const result: GiphyResponse = await response.json()
-        setTotalImages(result.pagination.total_count)
-        const data: GifFile[] = result.data.map((gif: GifResponse) => {
-          const { downsized } = gif.images
-          return {
-            id: gif.id,
-            src: {
-              url: downsized.url,
-              width: downsized.width,
-              height: downsized.height,
-            },
-            url: gif.bitly_url,
-          }
-        })
-        if (offset > 0) {
-          return setImages((prevData) => [...prevData, ...data])
+  const handleSearch: SearchFunc = async ({ query, offset }) => {
+    const queryParams: RequestQueryParams = {
+      api_key: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
+      q: query,
+      limit: 24,
+      offset,
+    }
+    const queryString: string = Object.keys(queryParams)
+      .map((key) => `${key}=${queryParams[key]}`)
+      .join("&")
+    const url = `https://api.giphy.com/v1/gifs/search?${queryString}`
+    try {
+      const response = await fetch(url)
+      const result: GiphyResponse = await response.json()
+      setTotalImages(result.pagination.total_count)
+      const data: GifFile[] = result.data.map((gif: GifResponse) => {
+        const { downsized } = gif.images
+        return {
+          id: gif.id,
+          src: {
+            url: downsized.url,
+            width: downsized.width,
+            height: downsized.height,
+          },
+          url: gif.bitly_url,
         }
-        setImages(data)
-      } catch (error) {
-        console.log(error)
+      })
+      if (offset > 0) {
+        return setImages((prevData) => [...prevData, ...data])
       }
-    },
-    []
-  )
+      setImages(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleChangeCategory = async (category: string) => {
     setSearchQuery("")

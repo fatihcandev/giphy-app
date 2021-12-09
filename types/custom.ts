@@ -36,7 +36,7 @@ export interface GifFile {
 
 interface SearchFuncArgs {
   query: string
-  offset?: number
+  offset: number
 }
 
 // eslint-disable-next-line no-unused-vars
