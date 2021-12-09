@@ -43,8 +43,8 @@ const Home: NextPage = () => {
   const [error, setError] = useState<string>("")
   const [images, setImages] = useState<GifFile[]>([])
   const [totalImages, setTotalImages] = useState<number>(0)
+  const [offset, setOffset] = useState<number>(0)
   const { favoritedGifs, handleFavorite } = useFavorite()
-  let offset = 0
 
   /*
    Giphy returns the same gifs after refetching. 
@@ -109,7 +109,8 @@ const Home: NextPage = () => {
   }
 
   const handleFetchMore = async () => {
-    await handleSearch({
+    setOffset((prev) => prev + 25)
+    handleSearch({
       query: selectedCategory || searchQuery,
       offset: offset + 25,
     })
