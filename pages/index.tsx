@@ -46,15 +46,18 @@ const Home: NextPage = () => {
   const { favoritedGifs, handleFavorite } = useFavorite()
   let offset = 0
 
-  // Giphy returns the same gifs after refetching. This causes rendering problems because
-  // there are children with the same key so UI gets confusing sometimes.
+  /*
+   Giphy returns the same gifs after refetching. 
+   This causes rendering problems because children gets rendered with the same key so 
+   UI gets confusing sometimes. Just a reminder.
+   */
 
   const handleSearch: SearchFunc = useCallback(
     async ({ query, offset = 0 }) => {
       const queryParams: RequestQueryParams = {
         api_key: process.env.NEXT_PUBLIC_GIPHY_API_KEY as string,
         q: query,
-        limit: 25,
+        limit: 24,
         offset,
       }
       const queryString: string = Object.keys(queryParams)
