@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react"
 import type { NextPage } from "next"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { Button, Input, Select, Typography } from "antd"
-import { LoadingOutlined } from "@ant-design/icons"
+import { HeartOutlined, LoadingOutlined } from "@ant-design/icons"
 
 import { GifCard } from "../components"
 import {
@@ -124,16 +124,14 @@ const Home: NextPage = () => {
               Search
             </Button>
           }
-          style={{
-            width: "100%",
-            maxWidth: 400,
-          }}
+          className={styles.keywordInput}
         />
         <Typography.Text>or</Typography.Text>
         <Select
           size="large"
           value={selectedCategory}
           onChange={(value) => handleChangeCategory(value)}
+          className={styles.categoriesSelect}
         >
           {options.map((option) => (
             <Select.Option key={option.value} value={option.value}>
@@ -142,14 +140,13 @@ const Home: NextPage = () => {
           ))}
         </Select>
         <Link href="/favorites" passHref>
-          <Typography.Link
-            style={{
-              fontSize: 16,
-              marginLeft: "auto",
-            }}
+          <Button
+            type="link"
+            icon={<HeartOutlined />}
+            className={styles.favoritesLink}
           >
             Favorites
-          </Typography.Link>
+          </Button>
         </Link>
       </div>
       {error && <span className={styles.error}>{error}</span>}
