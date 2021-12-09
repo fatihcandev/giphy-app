@@ -19,6 +19,7 @@ const GifCard = ({ image, favoritedGifs, onFavorite }: Props) => {
     <a
       key={image.id}
       className={styles.imageWrapper}
+      // propagation won't get stopped when using href
       onClick={() => window.open(image.url, "_blank")}
     >
       <img
