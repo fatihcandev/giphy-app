@@ -16,10 +16,11 @@ const GifCard = ({ image, favoritedGifs, onFavorite }: Props) => {
     (favoritedGif) => favoritedGif.id === image.id
   )
   return (
-    <a
-      key={image.id}
+    <div
+      role="button"
       className={styles.imageWrapper}
-      // propagation won't get stopped when using href
+      // propagation won't get stopped when using "a" tag
+      // and button can't be the descendant of another button
       onClick={() => window.open(image.url, "_blank")}
     >
       <img
@@ -42,7 +43,7 @@ const GifCard = ({ image, favoritedGifs, onFavorite }: Props) => {
           }}
         />
       </Tooltip>
-    </a>
+    </div>
   )
 }
 
