@@ -1,1 +1,1 @@
-Giphy returns the same gifs after refetching. This causes rendering problems because children gets rendered with the same key so UI gets confusing sometimes. Just a reminder.
+Giphy returns the same gifs -which has the same id- over and over again after increasing the offset while scrolling. This causes rendering problems because children gets rendered with the same key so UI gets confusing sometimes. Just a reminder.
