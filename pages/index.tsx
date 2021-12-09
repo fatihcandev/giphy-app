@@ -107,7 +107,7 @@ const Home: NextPage = () => {
 
   const handleFetchMore = async () => {
     setOffset((prev) => prev + 25)
-    handleSearch({
+    await handleSearch({
       query: selectedCategory || searchQuery,
       offset: offset + 25,
     })
