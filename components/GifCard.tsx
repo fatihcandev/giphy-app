@@ -16,7 +16,7 @@ const GifCard = ({ image, favoritedGifs, onFavorite }: Props) => {
     (favoritedGif) => favoritedGif.id === image.id
   )
   return (
-    <button
+    <a
       key={image.id}
       className={styles.imageWrapper}
       onClick={() => window.open(image.url, "_blank")}
@@ -41,7 +41,7 @@ const GifCard = ({ image, favoritedGifs, onFavorite }: Props) => {
           }}
         />
       </Tooltip>
-    </button>
+    </a>
   )
 }
 
