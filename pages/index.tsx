@@ -43,8 +43,11 @@ const Home: NextPage = () => {
   const [error, setError] = useState<string>("")
   const [images, setImages] = useState<GifFile[]>([])
   const [totalImages, setTotalImages] = useState<number>(0)
-  const [offset, setOffset] = useState<number>(0)
   const { favoritedGifs, handleFavorite } = useFavorite()
+  let offset = 0
+
+  // Giphy returns the same gifs after refetching. This causes rendering problems because
+  // there are children with the same key so UI gets confusing sometimes.
 
   const handleSearch: SearchFunc = useCallback(
     async ({ query, offset = 0 }) => {
@@ -85,10 +88,6 @@ const Home: NextPage = () => {
     []
   )
 
-  useEffect(() => {
-    if (offset > 0) handleSearch({ query: selectedCategory, offset })
-  }, [handleSearch, offset, selectedCategory])
-
   const handleChangeCategory = async (category: string) => {
     setSearchQuery("")
     setError("")
@@ -106,8 +105,11 @@ const Home: NextPage = () => {
     await handleSearch({ query: searchQuery, offset: 0 })
   }
 
-  const handleFetchMore = () => {
-    setOffset((prevOffset) => prevOffset + 25)
+  const handleFetchMore = async () => {
+    await handleSearch({
+      query: selectedCategory || searchQuery,
+      offset: offset + 25,
+    })
   }
 
   return (
@@ -150,28 +152,32 @@ const Home: NextPage = () => {
         </Link>
       </div>
       {error && <span className={styles.error}>{error}</span>}
-      <InfiniteScroll
-        dataLength={images.length}
-        next={handleFetchMore}
-        hasMore={totalImages > images.length}
-        loader={<LoadingOutlined style={{ fontSize: 32 }} />}
-        className={styles.images}
-        endMessage={
-          images.length > 0 ? (
-            <Typography.Text>Yay! You have seen all the gifs!</Typography.Text>
-          ) : null
-        }
-        scrollThreshold={1}
-      >
-        {images.map((image) => (
-          <GifCard
-            key={image.id}
-            image={image}
-            favoritedGifs={favoritedGifs}
-            onFavorite={handleFavorite}
-          />
-        ))}
-      </InfiniteScroll>
+      {images.length > 0 && (
+        <InfiniteScroll
+          dataLength={images.length}
+          next={handleFetchMore}
+          hasMore={totalImages > images.length}
+          loader={<LoadingOutlined style={{ fontSize: 32 }} />}
+          className={styles.images}
+          endMessage={
+            images.length > 0 ? (
+              <Typography.Text>
+                Yay! You have seen all the gifs!
+              </Typography.Text>
+            ) : null
+          }
+          scrollThreshold={1}
+        >
+          {images.map((image) => (
+            <GifCard
+              key={image.id}
+              image={image}
+              favoritedGifs={favoritedGifs}
+              onFavorite={handleFavorite}
+            />
+          ))}
+        </InfiniteScroll>
+      )}
     </div>
   )
 }
