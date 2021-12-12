@@ -158,8 +158,16 @@ const Home: NextPage = () => {
           dataLength={images.length}
           next={handleFetchMore}
           hasMore={totalImages > images.length}
-          loader={<LoadingOutlined style={{ fontSize: 32 }} />}
-          className={styles.images}
+          loader={
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <LoadingOutlined style={{ fontSize: 32 }} />
+            </div>
+          }
           endMessage={
             images.length > 0 ? (
               <Typography.Text>
@@ -167,16 +175,21 @@ const Home: NextPage = () => {
               </Typography.Text>
             ) : null
           }
+          style={{
+            overflow: "hidden",
+          }}
           scrollThreshold={1}
         >
-          {images.map((image) => (
-            <GifCard
-              key={image.id}
-              image={image}
-              favoritedGifs={favoritedGifs}
-              onFavorite={handleFavorite}
-            />
-          ))}
+          <div className={styles.images}>
+            {images.map((image) => (
+              <GifCard
+                key={image.id}
+                image={image}
+                favoritedGifs={favoritedGifs}
+                onFavorite={handleFavorite}
+              />
+            ))}
+          </div>
         </InfiniteScroll>
       )}
     </div>
